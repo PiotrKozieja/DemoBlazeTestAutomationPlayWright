@@ -5,39 +5,41 @@ import com.microsoft.playwright.Locator;
 public class ProductPage {
     private final Page page;
 
-    // Element locators
-    private final Locator productTitle;
-    private final Locator addToCartButton;
-    private final Locator homePageButton;
-
     public ProductPage(Page page) {
         this.page = page;
-
-        // Initialize locators
-        this.productTitle = page.locator("h2[class*=\"name\"]");
-        this.addToCartButton = page.locator("a[href][class*=\"btn btn-success btn-lg\"]");
-        this.homePageButton = page.locator("a[class*='navbar'][href*='index.html']");
     }
 
-    public Locator getProductTitle() {
-        return productTitle;
+    // Locators
+    public Locator getProductTitleLocator() {
+        return page.locator("h2[class*=\"name\"]");
+    }
+
+    public Locator getAddToCartButtonLocator() {
+        return page.locator("a[href][class*=\"btn btn-success btn-lg\"]");
+    }
+
+    public Locator getHomePageButtonLocator() {
+        return page.locator("a[class*='navbar'][href*='index.html']");
+    }
+
+    // Actions
+    public void clickAddToCartButton() {
+        getAddToCartButtonLocator().click();
     }
 
     public void clickHomePageButton() {
-        homePageButton.click();
+        getHomePageButtonLocator().click();
     }
 
-    public void addToCart() {
-        addToCartButton.click();
-    }
-    public String addToCartAndGetAlertMessage(Page page) {
+    // Utility methods
+    public String addToCartAndGetAlertMessage() {
         String[] messageHolder = new String[1];
         page.onceDialog(dialog -> {
             messageHolder[0] = dialog.message();
             dialog.accept();
         });
 
-        addToCartButton.click();
+        clickAddToCartButton();
         page.waitForTimeout(1000); // krótkie oczekiwanie (niezalecane, ale proste)
         return messageHolder[0];
     }

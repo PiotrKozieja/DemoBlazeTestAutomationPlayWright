@@ -7,41 +7,49 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 public class SignupPage {
     private final Page page;
 
-    // Element locators
-    private final Locator registrationPopUpTitle;
-    private final Locator usernameField;
-    private final Locator passwordField;
-    private final Locator signUpButton;
-
     public SignupPage(Page page) {
         this.page = page;
-
-        // Initialize locators
-        this.registrationPopUpTitle = page.locator("#signInModalLabel");
-        this.usernameField = page.locator("#sign-username");
-        this.passwordField = page.locator("#sign-password");
-        this.signUpButton = page.locator("button[onclick*='register()']");
     }
 
-    public String getPopUpTitle() {
-        registrationPopUpTitle.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        return registrationPopUpTitle.textContent();
+    public Locator getRegistrationPopUpTitleLocator() {
+        return page.locator("#signInModalLabel");
     }
 
+    public Locator getUsernameFieldLocator() {
+        return page.locator("#sign-username");
+    }
+
+    public Locator getPasswordFieldLocator() {
+        return page.locator("#sign-password");
+    }
+
+    public Locator getSignUpButtonLocator() {
+        return page.locator("button[onclick*='register()']");
+    }
+
+    public Locator getAlertSuccessLocator() {
+        return page.locator(".alert-success");
+    }
+
+    public Locator getAlertDangerLocator() {
+        return page.locator(".alert-danger");
+    }
+
+    // Actions
     public void setUsername(String username) {
-        usernameField.fill(username);
+        getUsernameFieldLocator().fill(username);
     }
 
     public void clearUsernameField() {
-        usernameField.clear();
+        getUsernameFieldLocator().clear();
     }
 
     public void setPassword(String password) {
-        passwordField.fill(password);
+        getPasswordFieldLocator().fill(password);
     }
 
     public void clickSignUpButton() {
-        signUpButton.click();
+        getSignUpButtonLocator().click();
     }
 
     public void fillSignupFormsAndSignup(String username, String password) {
@@ -50,7 +58,12 @@ public class SignupPage {
         clickSignUpButton();
     }
 
-    // Additional useful methods
+    // Utility methods
+    public String getPopUpTitle() {
+        getRegistrationPopUpTitleLocator().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        return getRegistrationPopUpTitleLocator().textContent();
+    }
+
     public boolean isSignUpSuccessful() {
         try {
             page.waitForSelector(".alert-success", new Page.WaitForSelectorOptions().setTimeout(5000));
@@ -61,6 +74,6 @@ public class SignupPage {
     }
 
     public String getErrorMessage() {
-        return page.locator(".alert-danger").textContent();
+        return getAlertDangerLocator().textContent();
     }
 }

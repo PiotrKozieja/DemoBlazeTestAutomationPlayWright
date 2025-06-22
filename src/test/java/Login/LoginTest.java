@@ -15,11 +15,11 @@ public class LoginTest extends BaseTest {
 
     @Test(priority = 1)
     public void testLoginPageLoads(){
-        assertThat(loginPage.getPopUpTitle()).hasText("Log in");
+        assertThat(loginPage.getPopUpLocator()).hasText("Log in");
     }
     @Test(priority = 2,dataProvider = "accountDataProvider")
     public void testLoggingIn(String username, String password){
         loginPage.fillLoginFormsAndLogin(username, password);
-        assertThat(loginPage.getWelcomeMessage()).hasText("Welcome "+username);
+        assertThat(page.getByText("Welcome "+username)).isVisible();
     }
 }

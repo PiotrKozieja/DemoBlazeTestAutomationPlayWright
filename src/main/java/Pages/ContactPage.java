@@ -3,45 +3,49 @@ package Pages;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Locator;
 
-public class ContactPage{
+public class ContactPage {
     private final Page page;
-
-    // Elementy strony
-    private final Locator contactPopUpTitle;
-    private final Locator emailForm;
-    private final Locator contactNameForm;
-    private final Locator messageForm;
-    private final Locator sendMessageButton;
 
     public ContactPage(Page page) {
         this.page = page;
-
-        // Inicjalizacja lokatorów
-        this.contactPopUpTitle = page.locator("h5[id*='exampleModalLabel']");
-        this.emailForm = page.locator("#recipient-email");
-        this.contactNameForm = page.locator("#recipient-name");
-        this.messageForm = page.locator("#message-text");
-        this.sendMessageButton = page.locator("button[onclick*='send()']");
     }
 
-    public Locator getContactPopUpTitle() {
-        return contactPopUpTitle;
+    // Locators
+    public Locator getContactPopUpTitleLocator() {
+        return page.locator("h5[id*='exampleModalLabel']");
     }
 
+    public Locator getEmailFormLocator() {
+        return page.locator("#recipient-email");
+    }
+
+    public Locator getContactNameFormLocator() {
+        return page.locator("#recipient-name");
+    }
+
+    public Locator getMessageFormLocator() {
+        return page.locator("#message-text");
+    }
+
+    public Locator getSendMessageButtonLocator() {
+        return page.locator("button[onclick*='send()']");
+    }
+
+    // Actions
     public void fillContactEmailForm(String email) {
-        emailForm.fill(email);
+        getEmailFormLocator().fill(email);
     }
 
     public void fillContactNameForm(String name) {
-        contactNameForm.fill(name);
+        getContactNameFormLocator().fill(name);
     }
 
     public void fillMessageForm(String message) {
-        messageForm.fill(message);
+        getMessageFormLocator().fill(message);
     }
 
     public void clickSendMessageButton() {
-        sendMessageButton.click();
+        getSendMessageButtonLocator().click();
     }
 
     public void fillContactFormsAndSend(String email, String name, String message) {
@@ -50,7 +54,9 @@ public class ContactPage{
         fillMessageForm(message);
         clickSendMessageButton();
     }
-    public String fillContactFormsSendAndGetAlertMessage(Page page, String email, String name, String message) {
+
+    // Utility methods
+    public String fillContactFormsSendAndGetAlertMessage(String email, String name, String message) {
         String[] messageHolder = new String[1];
         page.onceDialog(dialog -> {
             messageHolder[0] = dialog.message();

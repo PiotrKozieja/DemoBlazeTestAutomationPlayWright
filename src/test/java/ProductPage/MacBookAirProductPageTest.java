@@ -10,23 +10,27 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static org.testng.Assert.assertEquals;
 
 public class MacBookAirProductPageTest extends BaseTest {
-    ProductPage productPage;
+    private ProductPage productPage;
+
     @BeforeClass
-    public void loadMacBookAirProductPage(){
+    public void loadMacBookAirProductPage() {
         this.productPage = homePage.clickLaptopsCategories().clickMacBookAir();
     }
+
     @Test(priority = 1)
-    public void testProductLoadsCorrectly(){
-        assertThat(productPage.getProductTitle()).hasText("MacBook air");
+    public void testProductLoadsCorrectly() {
+        assertThat(productPage.getProductTitleLocator()).hasText("MacBook air");
     }
+
     @Test(priority = 2)
-    public void testAddedToCartAlert(){
-        String alert = productPage.addToCartAndGetAlertMessage(page);
-        Assert.assertEquals(alert,"Product added.","Cannot add product to the cart");
+    public void testAddedToCartAlert() {
+        String alert = productPage.addToCartAndGetAlertMessage();
+        assertEquals(alert, "Product added.", "Cannot add product to the cart");
     }
+
     @Test(priority = 3)
-    public void testHomePageButtonWorksCorrectly(){
+    public void testHomePageButtonWorksCorrectly() {
         productPage.clickHomePageButton();
-        assertThat(homePage.getCategoriesTitle()).isVisible();
+        assertThat(homePage.getCategoriesTitleLocator()).isVisible();
     }
 }

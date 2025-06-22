@@ -5,73 +5,104 @@ import com.microsoft.playwright.Locator;
 
 
 public class HomePage extends PageSample {
-    private Page page;
+    private final Page page;
 
-    final Locator signUpButton;
-    final Locator loginButton;
-    final Locator contactButton;
-    final Locator laptopCategoriesButton;
-    final Locator monitorCategoriesButton;
-    final Locator cartButton;
-    final Locator logoutButton;
-    final Locator categoriesTitle;
-
-    public Locator getCartButton() {
-        return cartButton;
-    }
     public HomePage(Page page) {
         super(page);
         this.page = page;
-
-        this.signUpButton = page.locator("#signin2");
-        this.loginButton = page.locator("#login2");
-        this.contactButton = page.locator("a[data-target*='exampleModal']");
-        this.laptopCategoriesButton = page.locator("a[onclick*=\"byCat('notebook')\"]");
-        this.monitorCategoriesButton = page.locator("a[onclick=\"byCat('monitor')\"]");
-        this.cartButton = page.locator("#cartur");
-        this.logoutButton = page.locator("//a[@onclick=\"logOut()\"]");
-        this.categoriesTitle = page.locator("//a[@id='cat']");
     }
 
+    // Locators
+    public Locator getSignUpButtonLocator() {
+        return page.locator("#signin2");
+    }
+
+    public Locator getLoginButtonLocator() {
+        return page.locator("#login2");
+    }
+
+    public Locator getContactButtonLocator() {
+        return page.locator("a[data-target*='exampleModal']");
+    }
+
+    public Locator getLaptopCategoriesButtonLocator() {
+        return page.locator("a[onclick*=\"byCat('notebook')\"]");
+    }
+
+    public Locator getMonitorCategoriesButtonLocator() {
+        return page.locator("a[onclick=\"byCat('monitor')\"]");
+    }
+
+    public Locator getPhoneCategoriesButtonLocator() {
+        return page.locator("a[onclick=\"byCat('phone')\"]");
+    }
+
+    public Locator getCartButtonLocator() {
+        return page.locator("#cartur");
+    }
+
+    public Locator getLogoutButtonLocator() {
+        return page.locator("//a[@onclick=\"logOut()\"]");
+    }
+
+    public Locator getCategoriesTitleLocator() {
+        return page.locator("//a[@id='cat']");
+    }
+
+    public Locator getAboutUsButtonLocator() {
+        return page.locator("//a[@class=\"nav-link\"][contains(text(),\"About us\")]");
+    }
+
+    // Actions
     public SignupPage clickSignUp() {
-        signUpButton.click();
+        getSignUpButtonLocator().click();
         return new SignupPage(page);
     }
 
     public LoginPage clickLogin() {
-        loginButton.click();
+        getLoginButtonLocator().click();
         return new LoginPage(page);
     }
 
     public ContactPage clickContactButton() {
-        contactButton.click();
+        getContactButtonLocator().click();
         return new ContactPage(page);
     }
 
     public CategoryPages clickLaptopsCategories() {
-        laptopCategoriesButton.click();
+        getLaptopCategoriesButtonLocator().click();
         return new CategoryPages(page);
     }
 
     public CategoryPages clickMonitorCategoryPage() {
-        monitorCategoriesButton.click();
+        getMonitorCategoriesButtonLocator().click();
         return new CategoryPages(page);
     }
 
     public CartPage clickCartButton() {
-        cartButton.click();
+        getCartButtonLocator().click();
         return new CartPage(page);
     }
 
     public HomePage clickLogoutButton() {
-        logoutButton.click();
+        getLogoutButtonLocator().click();
         return new HomePage(page);
     }
+
+    // Utility methods
     public boolean checkLogout() {
-        return loginButton.isVisible();
+        return getLoginButtonLocator().isVisible();
     }
-    public Locator getCategoriesTitle(){
-        return  categoriesTitle;
+
+    public boolean isPageDisplayedCorrectly() {
+        return getContactButtonLocator().isVisible() &&
+                getAboutUsButtonLocator().isVisible() &&
+                getCartButtonLocator().isVisible() &&
+                getLoginButtonLocator().isVisible() &&
+                getSignUpButtonLocator().isVisible() &&
+                getLaptopCategoriesButtonLocator().isVisible() &&
+                getMonitorCategoriesButtonLocator().isVisible() &&
+                getPhoneCategoriesButtonLocator().isVisible();
     }
 }
 
